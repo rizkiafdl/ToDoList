@@ -84,25 +84,23 @@ void seenotes(){
 		}
 	}
 	fclose(f);
-	printf("\n Sort by : [O]Earliest [N]Latest");
+	printf("\n[O]Earliest [N]Latest");
 	printf("\nBack to menu ? [press enter]");
-    while (1){
+    while (2){
     	if (kbhit) 
 		{ 
-    		c = getch();
+			c=getch();
             if(c == 13)
 			{
 				break;
 			}
-			else if(c ==79 && c== 111)
+			else if(c ==79 || c== 111)
 			{
-				printf("Earliest:\n");
-				break;
+				
 			}
-			else if(c ==78 && c== 110)
+			else if(c ==78 || c== 110)
 			{
 				printf("Latest:\n");
-				break;
 			}
         }
     }
