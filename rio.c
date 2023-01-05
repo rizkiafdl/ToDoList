@@ -9,7 +9,7 @@ struct todolist{
 	char notes[2048];
 	int value;
 	char date[30];
-};
+}yes[20];
 
 int menu(int rp,int ap){
 	if (rp == ap){
@@ -21,14 +21,14 @@ int menu(int rp,int ap){
 }
 
 void swap(int *a, int *b) {
-  
+
   int temp = *a;
   *a = *b;
   *b = temp;
 }
 
 void selectionSort(int array[], int size) {
-	
+
 	int step,i;
 	for (step = 0; step < size - 1; step++) {
 		int min_idx = step;
@@ -41,7 +41,7 @@ void selectionSort(int array[], int size) {
 }
 
 void addnotes(){
-	
+
 	f = fopen("notes.txt" , "a");
     int year, month, day, value, yon, hour, minute;
     char act[200];
@@ -60,8 +60,11 @@ void addnotes(){
                 printf("What hour[1-24]?\n"); scanf("%d", &hour);getchar();
 	            printf("What minute?\n"); scanf("%d", &minute);getchar();
 	            printf("Whats the activity?\n "); scanf("%[^\n]", act);getchar();
-	            fprintf(f, "%d:%d#%s\n", hour,minute,act);
+	            fprintf(f, "%d:%d %s\n", hour,minute,act);
 	            break;
+
+            case 2:
+                fprintf(f, "#");
             default:
 			 	break;
 	    }
@@ -70,39 +73,42 @@ void addnotes(){
 }
 
 void seenotes(){
-	
-	char c;
+
+	char c; int i;
 	char todo[100];
 	f = fopen("notes.txt" , "r");
 	if(f == NULL){
 		printf("there is nothing on notes");
 	}
 	else{
-		while(!feof(f)){
-			fgets(todo,50,f);
-			printf("%s",todo);
+		for(i = 0; !feof(f); i++){
+            fscanf(f, "%s#%d#%s#", yes[i].date, &yes[i].value, yes[i].notes);
 		}
 	}
-	fclose(f);
-	printf("\n[O]Earliest [N]Latest");
+    fclose(f);
+	for(int j = 0; j<i; j++){
+        printf("%s\n", yes[j].date);
+	}
+
+	//printf("\n Sort by : [O]Earliest [N]Latest");
 	printf("\nBack to menu ? [press enter]");
-    while (2){
-    	if (kbhit) 
-		{ 
-			c=getch();
+    while (1){
+    	if (kbhit)
+		{
+    		c = getch();
             if(c == 13)
 			{
 				break;
 			}
-			else if(c ==79 || c== 111)
+			else if(c ==79 && c== 111)
 			{
 				printf("Earliest:\n");
-				f = fopen("notes.txt" , "r");
-				fscanf();
+				break;
 			}
-			else if(c ==78 || c== 110)
+			else if(c ==78 && c== 110)
 			{
 				printf("Latest:\n");
+				break;
 			}
         }
     }
@@ -110,12 +116,12 @@ void seenotes(){
 }
 
 int main()
-{	
+{
 	int key;
 	int x;
-	int p=1; 
+	int p=1;
 	double y;
-	
+
     while(p!=4){
     system("COLOR 70");
     puts("");
@@ -129,7 +135,7 @@ int main()
     menu(1,p);printf(" Add notes\n");
     menu(2,p);printf(" See notes\n");
     menu(3,p);printf(" Exit\n");
-  	if (kbhit) { 
+  	if (kbhit) {
             key = getch();
             if(key == 119 && p!=1){
             	choice=0;
@@ -156,13 +162,13 @@ int main()
         }
     system("cls");
 	switch(choice){
-        case 1: 
+        case 1:
 			addnotes();
 		    break;
-		case 2: 	
+		case 2:
 			seenotes();
 		    break;
-        case 3: 
+        case 3:
 		    system("COLOR 70");
 //			char text1[]= "\n\n \t\t\t Welcome Back To To-Do List App ";
 			char text2[]= "\n\n \t\t\t Made by ";
@@ -173,7 +179,7 @@ int main()
 			char text7[]= "\n\n \t\t\t Muhammad Rizki Afdolli - 2602139141";
 			char text8[]= "\n\n \t\t\t Sessario Ammar Wibowo - 2602140433";
 			char text9[]= "\n\n \t\t\t Aulia Yasmin - 2602145030\n";
-			
+
 			printf("\n\n");
 //			for(x=0; text1[x]!=NULL; x++){
 //				printf("%c",text1[x]);
@@ -225,5 +231,9 @@ int main()
 			break;
     	}
     }
+
     return 0;
 }
+
+
+
