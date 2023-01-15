@@ -9,7 +9,7 @@ struct todolist{
 	char notes[2048];
 	int value;
 	char date[30];
-};
+}yes[20];
 
 int menu(int rp,int ap){
 	if (rp == ap){
@@ -21,14 +21,14 @@ int menu(int rp,int ap){
 }
 
 void swap(int *a, int *b) {
-  
+
   int temp = *a;
   *a = *b;
   *b = temp;
 }
 
 void selectionSort(int array[], int size) {
-	
+
 	int step,i;
 	for (step = 0; step < size - 1; step++) {
 		int min_idx = step;
@@ -41,7 +41,7 @@ void selectionSort(int array[], int size) {
 }
 
 void addnotes(){
-	
+
 	f = fopen("notes.txt" , "a");
     int year, month, day, value, yon, hour, minute;
     char act[200];
@@ -60,8 +60,11 @@ void addnotes(){
                 printf("What hour[1-24]?\n"); scanf("%d", &hour);getchar();
 	            printf("What minute?\n"); scanf("%d", &minute);getchar();
 	            printf("Whats the activity?\n "); scanf("%[^\n]", act);getchar();
-	            fprintf(f, "%d:%d#%s\n", hour,minute,act);
+	            fprintf(f, "%d:%d %s\n", hour,minute,act);
 	            break;
+
+            case 2:
+                fprintf(f, "#");
             default:
 			 	break;
 	    }
@@ -70,25 +73,28 @@ void addnotes(){
 }
 
 void seenotes(){
-	
-	char c;
+
+	char c; int i;
 	char todo[100];
 	f = fopen("notes.txt" , "r");
 	if(f == NULL){
 		printf("there is nothing on notes");
 	}
 	else{
-		while(!feof(f)){
-			fgets(todo,50,f);
-			printf("%s",todo);
+		for(i = 0; !feof(f); i++){
+            fscanf(f, "%s#%d#%s#", yes[i].date, &yes[i].value, yes[i].notes);
 		}
 	}
-	fclose(f);
-	printf("\n Sort by : [O]Earliest [N]Latest");
+    fclose(f);
+	for(int j = 0; j<i; j++){
+        printf("%s\n", yes[j].date);
+	}
+
+	//printf("\n Sort by : [O]Earliest [N]Latest");
 	printf("\nBack to menu ? [press enter]");
     while (1){
-    	if (kbhit) 
-		{ 
+    	if (kbhit)
+		{
     		c = getch();
             if(c == 13)
 			{
@@ -108,10 +114,62 @@ void seenotes(){
     }
     system("cls");
 }
-void endSys(){
+
+int main()
+{
+	int key;
 	int x;
+	int p=1;
 	double y;
-	system("COLOR 70");
+
+    while(p!=4){
+    system("COLOR 70");
+    puts("");
+    printf("\n\n\t    ________ 	_________    _______     _________    \n"
+		   "\t   |	    |  /   ___   \\  |       \\   /   ___   \\     \n"
+		   "\t   |__    __|  |  |   |  |  |   __   \\  |  |   |  |     \n"
+		   "\t      |  |     |  |   |  |  |  |  \\  |  |  |   |  |     \n"
+		   "\t      |	 |     |  |   |  |  |  |__/  |  |  |   |  |     \n"
+		   "\t      |	 |     |  |___|  |  |        /  |  |___|  |     \n"
+		   "\t      |__|     \\_________/  |_______/   \\_________/     \n\n");
+    menu(1,p);printf(" Add notes\n");
+    menu(2,p);printf(" See notes\n");
+    menu(3,p);printf(" Exit\n");
+  	if (kbhit) {
+            key = getch();
+            if(key == 119 && p!=1){
+            	choice=0;
+				system("cls");
+				p--;
+			}
+			else if(key == 115 && p!=3){
+				choice=0;
+				system("cls");
+				p++;
+			}
+			else if(key == 13 && p==1){
+				choice=1;
+			}
+			else if(key == 13 && p==2){
+				choice=2;
+			}
+			else if(key == 13 && p==3){
+				choice=3;
+			}
+			else{
+				system("cls");
+			}
+        }
+    system("cls");
+	switch(choice){
+        case 1:
+			addnotes();
+		    break;
+		case 2:
+			seenotes();
+		    break;
+        case 3:
+		    system("COLOR 70");
 //			char text1[]= "\n\n \t\t\t Welcome Back To To-Do List App ";
 			char text2[]= "\n\n \t\t\t Made by ";
 			char text3[]= "\n\n \t\t\t Kelompok 1";
@@ -121,7 +179,7 @@ void endSys(){
 			char text7[]= "\n\n \t\t\t Muhammad Rizki Afdolli - 2602139141";
 			char text8[]= "\n\n \t\t\t Sessario Ammar Wibowo - 2602140433";
 			char text9[]= "\n\n \t\t\t Aulia Yasmin - 2602145030\n";
-			
+
 			printf("\n\n");
 //			for(x=0; text1[x]!=NULL; x++){
 //				printf("%c",text1[x]);
@@ -170,63 +228,12 @@ void endSys(){
 			}
 			getch;
 			exit(0);
-}
-
-int main()
-{	
-	int key;
-	int p=1; 
-	
-    while(p!=4){
-    system("COLOR 70");
-    puts("");
-    printf("\n\n\t    ________ 	_________    _______     _________    \n"
-		   "\t   |	    |  /   ___   \\  |       \\   /   ___   \\     \n"
-		   "\t   |__    __|  |  |   |  |  |   __   \\  |  |   |  |     \n"
-		   "\t      |  |     |  |   |  |  |  |  \\  |  |  |   |  |     \n"
-		   "\t      |	 |     |  |   |  |  |  |__/  |  |  |   |  |     \n"
-		   "\t      |	 |     |  |___|  |  |        /  |  |___|  |     \n"
-		   "\t      |__|     \\_________/  |_______/   \\_________/     \n\n");
-    menu(1,p);printf(" Add notes\n");
-    menu(2,p);printf(" See notes\n");
-    menu(3,p);printf(" Exit\n");
-  	if (kbhit) { 
-            key = getch();
-            if(key == 119 && p!=1){
-            	choice=0;
-				system("cls");
-				p--;
-			}
-			else if(key == 115 && p!=3){
-				choice=0;
-				system("cls");
-				p++;
-			}
-			else if(key == 13 && p==1){
-				choice=1;
-			}
-			else if(key == 13 && p==2){
-				choice=2;
-			}
-			else if(key == 13 && p==3){
-				choice=3;
-			}
-			else{
-				system("cls");
-			}
-        }
-    system("cls");
-	switch(choice){
-        case 1: 
-			addnotes();
-		    break;
-		case 2: 	
-			seenotes();
-		    break;
-        case 3: 
-		    endSys();
 			break;
     	}
     }
+
     return 0;
 }
+
+
+
