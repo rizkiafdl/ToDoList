@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <unistd.h>
 #include <time.h>
+
 FILE *f;
 int choice = 0;
 struct todolist{
@@ -19,23 +20,7 @@ int menu(int rp,int ap){
 		printf("\t  ");
 	}
 }
-void swap(int *a, int *b) {
-  int temp = *a;
-  *a = *b;
-  *b = temp;
-}
-void selectionSort(int array[], int size) {
 
-	int step,i;
-	for (step = 0; step < size - 1; step++) {
-		int min_idx = step;
-		for (i = step + 1; i < size; i++) {
-			if (array[i] < array[min_idx])
-		    min_idx = i;
-		}
-		swap(&array[min_idx], &array[step]);
-	}
-}
 void addnotes(){
 	f = fopen("notes.txt" , "a");
     int year, month, day, value, yon, hour, minute;
@@ -47,8 +32,8 @@ void addnotes(){
     fprintf(f, "%d/%d/%d#%d#", day,month,year,value);
     int j = 0;
     for(int j = 0; yon!=2; j++){
-            printf("Do you want to add?\n1.Yes\n2.No\n");
-            puts("========================");
+           printf("Do you want to add?\n1.Yes\n2.No\n");
+           puts("========================");
             scanf("%d",&yon);getchar();
             if(yon==2){
                 fprintf(f, "\n");
@@ -61,12 +46,9 @@ void addnotes(){
             }
             printf("What hour[1-24]?\n"); scanf("%d", &hour);getchar();
             printf("What minute?\n"); scanf("%d", &minute);getchar();
-            printf("Whats the activity?\n");scanf("%[^\n]", act);getchar();
-            printf("\n%d",j);
-
+            printf("Whats the activity?\n"); scanf("%[^\n]", act);getchar();
         if(minute<10 && j==0){
-            fprintf(f, "%d:0%d %s", hour,minute,act);
-            continue;
+            fprintf(f, "%d:0%d %s", hour,minute,act);            continue;
         }
         else if(minute<10 && j!=0){
             fprintf(f, ",%d:0%d %s", hour,minute,act);
@@ -84,6 +66,8 @@ void addnotes(){
     fclose(f);
     fflush(f);
 }
+
+
 void seenotes(){
     system("cls");
     int batas = 0;
@@ -98,7 +82,7 @@ void seenotes(){
 		for(int i = 0; !feof(f); i++){
             fscanf(f, "%[^#]#%d#%[^\n]\n", yes[i].date, &yes[i].value, yes[i].notes);
             batas++;
-            		}
+            }
 	}
     fclose(f);
 	//sort
@@ -133,7 +117,7 @@ void seenotes(){
                     printf("\t\t\t\t[%s]\n", yes[batas].date);
                     puts("\t\t\t\t=============");
                     while(buffer!=NULL){
-                        printf("\t\t\t\t|%s|\n", buffer);
+                        printf("%s\n", buffer);
                         buffer = strtok(NULL, ",");
                     }
                     puts("\t\t\t\t=============\n\n\n\n");
@@ -151,7 +135,7 @@ void seenotes(){
             int flag = 0;
             for(int i = 0; i<batas; i++){
                 if(yes[i].value == key){
-                    flag = 1;
+                        flag = 1;
                     printf("\t\t\t\t[%s]\n", yes[i].date);
                     puts("\t\t\t\t=============");
                     char *buffer = strtok(yes[i].notes, ",");
@@ -162,15 +146,13 @@ void seenotes(){
                     puts("\t\t\t\t=============\n\n\n\n");
                 }
             }
-
-            if(flag == 0){
-                printf("The Inquired date does not exist..");
-            }
+                if(flag == 0){
+                    printf("The Inquired date does not exist..");
+                }
         break;
         }
         case 3:{
             int del;
-            system("cls");
             for(int i = 0; i<batas; i++){
                 printf("\t\t\t\t%d.[%s]\n", i+1,yes[i].date);
                 char *buffer, tempbuf[1000];
@@ -192,9 +174,9 @@ void seenotes(){
                 }
                 fprintf(f, "%s#%d#%s\n", yes[i].date, yes[i].value, yes[i].notes);
             }
-            printf("\n[Succesfully deleted Day %d]\n",del);
-            fclose(f);
             fflush(f);
+            fclose(f);
+
         break;
         }
         case 4:{
@@ -205,63 +187,103 @@ void seenotes(){
                 buffer = strtok(tempbuf, ",");
                 puts("\t\t\t\t=============");
                 while(buffer!=NULL){
-                    printf("\t\t\t\t|%s|\n", buffer);
+                    printf("\t\t\t\t[%s]\n", buffer);
                     buffer = strtok(NULL, ",");
                 }
                 puts("\t\t\t\t=============\n");
             }
             int upd;
+            int j = 0;
             printf("Choose the date's note you wish to edit\nChoose: ");
             scanf("%d", &upd);getchar();
             int ove;
             printf("1. Overwrite\n2. Add\nChoose: ");
             scanf("%d", &ove);getchar();
-            char buffer[1000] = " ";
+            char buffer[2048] = {" "};
+            char buffertemptemp[1000];
             int coz = 0;
             if(ove==1){
                 int jam, menit;
-                char buffertemp[1000];
+                char buffertemp[1000] = {" "};
                 char nota[100];
                 int l = 0;
+                int j = 0;
                 do{
+                memset(buffertemp, 0, sizeof(buffertemp));
                 printf("1. Add\n2. Stop\nChoose: ");
                 scanf("%d", &coz);getchar();
-                if(coz == 2)return;
-                l++;
-                printf("What hour?"); scanf("%d", &jam);
+                if(coz == 2)continue;
+                printf("What hour?"); scanf("%d", &jam);getchar();
                 printf("What minute?"); scanf("%d", & menit);getchar();
-                printf("What activities"); scanf("%s", nota);getchar();
+                printf("What activities?\n"); scanf("%[^\n]", nota);getchar();
                 if(menit<10 && l == 0){
                 sprintf(buffertemp,"%d:0%d %s",jam,menit,nota);
                 strcat(buffer, buffertemp);
+                l++;
                 continue;
                 }
                 else if(menit<10 && l != 0){
-                sprintf(buffertemp,",%d:0%d %s",jam,menit,nota);
+                sprintf(buffertemp ,",%d:0%d %s",jam,menit,nota);
                 strcat(buffer, buffertemp);
+                l++;
                 continue;
                 }
                 else if(menit>10 && l == 0){
                 sprintf(buffertemp,"%d:%d %s",jam,menit,nota);
                 strcat(buffer, buffertemp);
+                l++;
                 continue;
                 }
                 else if(menit>10 && l != 0){
                 sprintf(buffertemp,",%d:%d %s",jam,menit,nota);
                 strcat(buffer, buffertemp);
+                l++;
                 continue;
                 }
+
             }while(coz!=2);
-            puts("\t\t\t\t=============\n");
-            printf("|%s|", buffer);
             strcpy(yes[upd-1].notes, buffer);
             f = fopen("notes.txt", "w");
-            puts("\t\t\t\t=============");
             for(int i = 0; yes[i].value!=NULL; i++){
-                fprintf("%s#%d#%s\n", yes[i].date, yes[i].value, yes[i].notes);
+                fprintf(f, "%s#%d#%s\n", yes[i].date, yes[i].value, yes[i].notes);
             }
-            puts("\t\t\t\t=============\n");
             fclose(f);
+            }
+            else if(ove==2){
+                int jam, menit;
+                char buffertemp[1000] = {" "};
+                char nota[100];
+                int l = 0;
+                do{
+                memset(buffertemp, 0, sizeof(buffertemp));
+                printf("1. Add\n2. Stop\nChoose: ");
+                scanf("%d", &coz);getchar();
+                if(coz == 2)continue;
+                printf("What hour?"); scanf("%d", &jam);getchar();
+                printf("What minute?"); scanf("%d", & menit);getchar();
+                printf("What activities"); scanf("%[^\n]", nota);getchar();
+                if(menit<10){
+                sprintf(buffertemp ,",%d:0%d %s",jam,menit,nota);
+                strcat(yes[upd-1].notes, buffertemp);
+                l++;
+                continue;
+                }
+                else if(menit>10){
+                sprintf(buffertemp,",%d:%d %s",jam,menit,nota);
+                strcat(yes[upd-1].notes, buffertemp);
+                l++;
+                continue;
+                }
+
+
+            }while(coz!=2);
+                 f = fopen("notes.txt", "w");
+            for(int i = 0; yes[i].value!=NULL; i++){
+                fprintf(f, "%s#%d#%s\n", yes[i].date, yes[i].value, yes[i].notes);
+            }
+            fclose(f);
+
+            printf("Notes have been successfully appended upon desired note");
             }
         break;
         }
@@ -272,7 +294,7 @@ void seenotes(){
 	}
     void keluar(){
         int x,y;
-         system("COLOR 70");
+          system("COLOR 70");
 //			char text1[]= "\n\n \t\t\t Welcome Back To To-Do List App ";
 			char text2[]= "\n\n \t\t\t Made by ";
 			char text3[]= "\n\n \t\t\t Kelompok 1";
